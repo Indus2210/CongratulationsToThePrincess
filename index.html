@@ -109,7 +109,9 @@
     transition:transform 0.3s ease, box-shadow 0.3s ease;
   }
   .card:hover{transform:translateY(-8px);box-shadow:0 18px 36px rgba(156,74,46,0.24);}
-  .card img,.card video{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:#000;}
+  .card img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;}
+  .card .media-wrap{width:100%;aspect-ratio:4/3;position:relative;overflow:hidden;background:#000;}
+  .card .media-wrap video{width:100%;height:100%;object-fit:cover;display:block;}
   .card .body{padding:18px 20px 22px;}
   .card h3{margin:0 0 8px;color:var(--copper-dark);font-size:1.2rem;}
   .card p{margin:0;line-height:1.55;font-size:0.97rem;}
@@ -127,8 +129,46 @@
     border-radius:6px;
     box-shadow:0 10px 24px rgba(156,74,46,0.18);
   }
-  .collage img,.collage video{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:2px;display:block;background:#000;}
+  .collage img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:2px;display:block;}
+  .collage .media-wrap{width:100%;aspect-ratio:1/1;position:relative;overflow:hidden;border-radius:2px;background:#000;}
+  .collage .media-wrap video{width:100%;height:100%;object-fit:cover;display:block;}
   .collage figcaption{font-family:'Pacifico',cursive;font-size:0.85rem;text-align:center;color:var(--copper-dark);margin-top:8px;}
+
+  /* ---------- кнопка воспроизведения со звуком ---------- */
+  .play-btn{
+    position:absolute;
+    top:50%;left:50%;
+    transform:translate(-50%,-50%);
+    width:56px;height:56px;
+    border-radius:50%;
+    background:rgba(0,0,0,0.5);
+    border:2px solid rgba(255,255,255,0.9);
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    transition:opacity 0.25s ease, transform 0.2s ease, background 0.2s ease;
+    z-index:2;
+    padding:0;
+  }
+  .play-btn:hover{transform:translate(-50%,-50%) scale(1.08);background:rgba(0,0,0,0.65);}
+  .play-btn::after{
+    content:'';
+    display:block;
+    width:0;height:0;
+    border-style:solid;
+    border-width:9px 0 9px 15px;
+    border-color:transparent transparent transparent #fff;
+    margin-left:4px;
+  }
+  .play-btn.playing{opacity:0.55;}
+  .play-btn.playing:hover{opacity:1;}
+  .play-btn.playing::after{
+    width:14px;height:16px;
+    border-style:none;
+    margin-left:0;
+    background:
+      linear-gradient(#fff,#fff) left/4px 100% no-repeat,
+      linear-gradient(#fff,#fff) right/4px 100% no-repeat;
+  }
   .collage figure:nth-child(odd){transform:rotate(-3deg);}
   .collage figure:nth-child(even){transform:rotate(2.5deg);}
   .collage figure:nth-child(3n){transform:rotate(-1.5deg);}
@@ -222,7 +262,10 @@
       </div>
     </div>
     <div class="card reveal">
-      <video src="photos/work-dance.mp4" autoplay muted loop playsinline></video>
+      <div class="media-wrap">
+        <video src="photos/work-dance.mp4" autoplay muted loop playsinline></video>
+        <button class="play-btn" aria-label="Включить со звуком"></button>
+      </div>
       <div class="body">
         <h3>Преданная своему делу</h3>
         <p>Работа выматывает, но ты остаёшься — потому что умеешь ценить людей вокруг себя больше, чем усталость.</p>
@@ -243,7 +286,10 @@
       </div>
     </div>
     <div class="card reveal">
-      <video src="photos/sunset-walk.mp4" autoplay muted loop playsinline style="object-position:center 12%;"></video>
+      <div class="media-wrap">
+        <video src="photos/sunset-walk.mp4" autoplay muted loop playsinline style="object-position:center 12%;"></video>
+        <button class="play-btn" aria-label="Включить со звуком"></button>
+      </div>
       <div class="body">
         <h3>Умеешь наполняться тишиной</h3>
         <p>Ты знаешь цену своему пространству — и это не одиночество, а способ оставаться собой.</p>
@@ -258,7 +304,13 @@
   <p class="section-sub reveal">Моменты, которые о тебе говорят больше слов.</p>
   <div class="collage">
     <figure class="reveal"><img src="photos/hero-real.jpg" alt=""><figcaption>Это ты</figcaption></figure>
-    <figure class="reveal"><video src="photos/friends-night.mp4" autoplay muted loop playsinline></video><figcaption>Подруги</figcaption></figure>
+    <figure class="reveal">
+      <div class="media-wrap">
+        <video src="photos/friends-night.mp4" autoplay muted loop playsinline></video>
+        <button class="play-btn" aria-label="Включить со звуком"></button>
+      </div>
+      <figcaption>Подруги</figcaption>
+    </figure>
     <figure class="reveal"><img src="photos/car-still.jpg" alt=""><figcaption>Покатушки</figcaption></figure>
     <figure class="reveal"><img src="photos/work-still.jpg" alt=""><figcaption>Коллеги</figcaption></figure>
     <figure class="reveal"><img src="photos/home-porch.jpg" alt=""><figcaption>Дом</figcaption></figure>
@@ -308,7 +360,10 @@
         </div>
       </div>
       <div class="card">
-        <video src="photos/car-ride-real.mp4" autoplay muted loop playsinline></video>
+        <div class="media-wrap">
+          <video src="photos/car-ride-real.mp4" autoplay muted loop playsinline></video>
+          <button class="play-btn" aria-label="Включить со звуком"></button>
+        </div>
         <div class="body">
           <h3>Личный психотерапевт — руль</h3>
           <p>Полчаса за рулём без цели лечат лучше любого разговора. Главное — бензин.</p>
@@ -383,26 +438,54 @@
   setInterval(spawnHeart, 1200);
   for(let i=0;i<6;i++) setTimeout(spawnHeart, i*300);
 
-  // звук у видео «в фокусе» — тихо, только после первого клика (так требуют браузеры)
-  let audioUnlocked = false;
-  const unlockAudio = () => { audioUnlocked = true; };
-  document.addEventListener('click', unlockAudio, {once:true});
-  document.addEventListener('touchstart', unlockAudio, {once:true});
-  document.addEventListener('keydown', unlockAudio, {once:true});
+  // кнопка воспроизведения со звуком поверх видео — пауза и только одно видео со звуком одновременно
+  let activeWrap = null;
 
-  const focusVideos = document.querySelectorAll('video');
-  const vio = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{
-      const v = e.target;
-      if(e.isIntersecting && e.intersectionRatio > 0.6 && audioUnlocked){
-        v.muted = false;
-        v.volume = 0.35;
-      } else {
-        v.muted = true;
+  function resetToIdle(wrap){
+    const video = wrap.querySelector('video');
+    const btn = wrap.querySelector('.play-btn');
+    video.muted = true;
+    video.loop = true;
+    video.currentTime = 0;
+    video.play();
+    btn.classList.remove('playing');
+    if(activeWrap === wrap) activeWrap = null;
+  }
+
+  document.querySelectorAll('.media-wrap').forEach(wrap=>{
+    const video = wrap.querySelector('video');
+    const btn = wrap.querySelector('.play-btn');
+    if(!video || !btn) return;
+
+    btn.addEventListener('click', (e)=>{
+      e.stopPropagation();
+
+      if(activeWrap === wrap){
+        // это видео уже активно — просто пауза/продолжить
+        if(video.paused){
+          video.play();
+          btn.classList.add('playing');
+        } else {
+          video.pause();
+          btn.classList.remove('playing');
+        }
+        return;
       }
+
+      // включаем это видео со звуком — предыдущее активное возвращаем в тихий цикл
+      if(activeWrap) resetToIdle(activeWrap);
+
+      video.loop = false;
+      video.currentTime = 0;
+      video.muted = false;
+      video.volume = 0.7;
+      video.play();
+      btn.classList.add('playing');
+      activeWrap = wrap;
     });
-  },{threshold:[0,0.6,1]});
-  focusVideos.forEach(v=>vio.observe(v));
+
+    video.addEventListener('ended', ()=> resetToIdle(wrap));
+  });
 
   // конфетти
   const confettiLayer = document.getElementById('confetti-layer');
