@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>С Днём Рождения, Принцесса!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --copper:#c1623f;
+    --copper-dark:#9c4a2e;
+    --gold:#e8a33d;
+    --rose:#d96c6c;
+    --cream:#fdf1e6;
+    --cream-dark:#f3dcc4;
+    --ink:#4a2f22;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;overflow-x:hidden;width:100%;}
+  body{
+    margin:0;
+    font-family:'Nunito',sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    overflow-x:hidden;
+    width:100%;
+  }
+  h1,h2,.script{
+    font-family:'Pacifico',cursive;
+    font-weight:400;
+  }
+  .wrap{max-width:1000px;margin:0 auto;padding:0 24px;}
+  section{padding:90px 0;position:relative;}
+
+  /* ---------- floating background hearts ---------- */
+  #hearts{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0;}
+  .heart{position:absolute;bottom:-40px;opacity:0.5;animation:floatUp linear infinite;}
+  @keyframes floatUp{
+    0%{transform:translateY(0) rotate(0deg);opacity:0.6;}
+    100%{transform:translateY(-110vh) rotate(25deg);opacity:0;}
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    background:linear-gradient(160deg,var(--gold),var(--copper) 60%,var(--copper-dark));
+    color:var(--cream);
+    position:relative;
+    z-index:1;
+  }
+  .hero h1{font-size:clamp(2.6rem,7vw,4.5rem);margin:0 0 6px;text-shadow:0 4px 18px rgba(0,0,0,0.25);}
+  .hero .age{font-size:1.3rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;opacity:0.9;margin-bottom:28px;}
+  .polaroid{
+    background:#fff;
+    padding:14px 14px 50px;
+    border-radius:4px;
+    box-shadow:0 20px 40px rgba(0,0,0,0.35);
+    transform:rotate(-4deg);
+    max-width:300px;
+    margin-bottom:34px;
+  }
+  .polaroid img{display:block;width:100%;border-radius:2px;}
+  .polaroid .cap{
+    font-family:'Pacifico',cursive;
+    color:var(--copper-dark);
+    text-align:center;
+    margin-top:12px;
+    font-size:1.1rem;
+  }
+  .hero p.lead{max-width:560px;font-size:1.15rem;line-height:1.6;opacity:0.95;padding:0 20px;}
+  .scrolldown{margin-top:40px;font-size:2rem;animation:bounce 2s infinite;opacity:0.85;}
+  @keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(12px);}}
+
+  /* ---------- section headers ---------- */
+  .section-title{
+    text-align:center;
+    font-size:clamp(2rem,5vw,2.8rem);
+    color:var(--copper-dark);
+    margin-bottom:10px;
+  }
+  .section-sub{
+    text-align:center;
+    max-width:620px;
+    margin:0 auto 50px;
+    opacity:0.8;
+    line-height:1.6;
+  }
+
+  .reveal{opacity:0;transform:translateY(30px);transition:all 0.8s ease;}
+  .reveal.visible{opacity:1;transform:translateY(0);}
+
+  /* ---------- trait cards ---------- */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:28px;
+  }
+  .card{
+    background:#fff;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 12px 30px rgba(156,74,46,0.14);
+    transition:transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .card:hover{transform:translateY(-8px);box-shadow:0 18px 36px rgba(156,74,46,0.24);}
+  .card img,.card video{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:#000;}
+  .card .body{padding:18px 20px 22px;}
+  .card h3{margin:0 0 8px;color:var(--copper-dark);font-size:1.2rem;}
+  .card p{margin:0;line-height:1.55;font-size:0.97rem;}
+
+  /* ---------- collage ---------- */
+  .collage{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+  }
+  .collage figure{
+    margin:0;
+    background:#fff;
+    padding:8px 8px 26px;
+    border-radius:6px;
+    box-shadow:0 10px 24px rgba(156,74,46,0.18);
+  }
+  .collage img,.collage video{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:2px;display:block;background:#000;}
+  .collage figcaption{font-family:'Pacifico',cursive;font-size:0.85rem;text-align:center;color:var(--copper-dark);margin-top:8px;}
+  .collage figure:nth-child(odd){transform:rotate(-3deg);}
+  .collage figure:nth-child(even){transform:rotate(2.5deg);}
+  .collage figure:nth-child(3n){transform:rotate(-1.5deg);}
+
+  /* ---------- funny dossier ---------- */
+  .dossier-wrap{
+    background:var(--cream-dark);
+    border-radius:24px;
+    padding:50px 40px;
+  }
+  .meters{display:flex;flex-direction:column;gap:22px;max-width:620px;margin:0 auto 50px;}
+  .meter-row .label{display:flex;justify-content:space-between;font-weight:700;margin-bottom:6px;color:var(--copper-dark);}
+  .meter-track{background:#fff;border-radius:20px;height:16px;overflow:hidden;box-shadow:inset 0 2px 4px rgba(0,0,0,0.08);}
+  .meter-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,var(--gold),var(--rose));width:0;transition:width 1.6s ease;}
+
+  .funny-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:24px;
+  }
+  .funny-grid .card h3{font-size:1.05rem;}
+
+  /* ---------- closing ---------- */
+  .closing{
+    background:linear-gradient(160deg,var(--copper-dark),var(--copper) 60%,var(--gold));
+    color:var(--cream);
+    text-align:center;
+  }
+  .closing img{max-width:260px;margin-bottom:28px;border-radius:14px;box-shadow:0 20px 40px rgba(0,0,0,0.3);}
+  .closing h2{font-size:clamp(2rem,5vw,2.8rem);margin-bottom:18px;}
+  .closing p{max-width:600px;margin:0 auto 14px;line-height:1.7;font-size:1.08rem;}
+  .signature{font-family:'Pacifico',cursive;font-size:1.4rem;margin-top:26px;opacity:0.95;}
+  .edit-note{font-size:0.8rem;opacity:0.75;margin-top:4px;}
+  .surprise-btn{
+    margin-top:36px;
+    background:var(--cream);
+    color:var(--copper-dark);
+    border:none;
+    padding:16px 34px;
+    border-radius:40px;
+    font-size:1.05rem;
+    font-weight:800;
+    cursor:pointer;
+    box-shadow:0 10px 24px rgba(0,0,0,0.25);
+    transition:transform 0.2s ease;
+  }
+  .surprise-btn:hover{transform:scale(1.06);}
+
+  footer{text-align:center;padding:26px;font-size:0.85rem;color:var(--copper-dark);opacity:0.7;background:var(--cream);}
+
+  #confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:999;overflow:hidden;}
+  .confetti-piece{position:absolute;top:-20px;border-radius:2px;animation:confettiFall linear forwards;}
+  @keyframes confettiFall{
+    to{transform:translateY(110vh) rotate(540deg);opacity:0.2;}
+  }
+
+  @media (max-width:700px){
+    .collage{grid-template-columns:repeat(2,1fr);}
+    section{padding:60px 0;}
+  }
+</style>
+</head>
+<body>
+
+<div id="hearts"></div>
+<div id="confetti-layer"></div>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero">
+  <div class="polaroid">
+    <img src="photos/hero-real.jpg" alt="Алина">
+    <div class="cap">Принцесса ✦ 26</div>
+  </div>
+  <h1>С Днём Рождения, Принцесса!</h1>
+  <div class="age">26 — твой самый яркий год</div>
+  <p class="lead">Сегодня день, когда весь мир просто обязан сказать тебе спасибо за то, что ты в нём есть.</p>
+  <div class="scrolldown">↓</div>
+</section>
+
+<!-- ===================== ПОЛОЖИТЕЛЬНЫЕ ЧЕРТЫ ===================== -->
+<section class="wrap">
+  <h2 class="section-title reveal">Какая ты на самом деле</h2>
+  <p class="section-sub reveal">Без пафоса, просто то, что про тебя правда — и за что тебя действительно стоит любить.</p>
+
+  <div class="grid">
+    <div class="card reveal">
+      <img src="photos/redhair-real.jpg" alt="Рыжая и яркая">
+      <div class="body">
+        <h3>Яркая, как огонь 🔥</h3>
+        <p>Рыжая — значит с характером. Тебя невозможно не заметить, и это не только про волосы.</p>
+      </div>
+    </div>
+    <div class="card reveal">
+      <video src="photos/work-dance.mp4" autoplay muted loop playsinline></video>
+      <div class="body">
+        <h3>Преданная своему делу</h3>
+        <p>Работа выматывает, но ты остаёшься — потому что умеешь ценить людей вокруг себя больше, чем усталость.</p>
+      </div>
+    </div>
+    <div class="card reveal">
+      <img src="photos/strength-real.jpg" alt="Сила духа">
+      <div class="body">
+        <h3>Сильная духом</h3>
+        <p>Непростые отношения с родителями не сломали тебя — ты всё равно идёшь своим путём, и это достойно уважения.</p>
+      </div>
+    </div>
+    <div class="card reveal">
+      <img src="photos/home-porch.jpg" alt="Дом">
+      <div class="body">
+        <h3>Хранительница дома</h3>
+        <p>Несмотря ни на что, ты держишь свой мир — и находишь в нём место и для себя, и для близких.</p>
+      </div>
+    </div>
+    <div class="card reveal">
+      <video src="photos/sunset-walk.mp4" autoplay muted loop playsinline style="object-position:center 12%;"></video>
+      <div class="body">
+        <h3>Умеешь наполняться тишиной</h3>
+        <p>Ты знаешь цену своему пространству — и это не одиночество, а способ оставаться собой.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ФОТОКОЛЛАЖ ===================== -->
+<section class="wrap">
+  <h2 class="section-title reveal">Фотоколлаж</h2>
+  <p class="section-sub reveal">Моменты, которые о тебе говорят больше слов.</p>
+  <div class="collage">
+    <figure class="reveal"><img src="photos/hero-real.jpg" alt=""><figcaption>Это ты</figcaption></figure>
+    <figure class="reveal"><video src="photos/friends-night.mp4" autoplay muted loop playsinline></video><figcaption>Подруги</figcaption></figure>
+    <figure class="reveal"><img src="photos/car-still.jpg" alt=""><figcaption>Покатушки</figcaption></figure>
+    <figure class="reveal"><img src="photos/work-still.jpg" alt=""><figcaption>Коллеги</figcaption></figure>
+    <figure class="reveal"><img src="photos/home-porch.jpg" alt=""><figcaption>Дом</figcaption></figure>
+    <figure class="reveal"><img src="photos/field-daisies.jpg" alt=""><figcaption>На природе</figcaption></figure>
+    <figure class="reveal"><img src="photos/sunset-still.jpg" alt="" style="object-position:center 15%;"><figcaption>Закат</figcaption></figure>
+  </div>
+</section>
+
+<!-- ===================== ШУТОЧНОЕ ДОСЬЕ ===================== -->
+<section class="wrap">
+  <h2 class="section-title reveal">Шуточное досье</h2>
+
+  <div class="dossier-wrap reveal">
+    <div class="meters">
+      <div class="meter-row">
+        <div class="label"><span>Энергия после смены на работе</span><span>15%</span></div>
+        <div class="meter-track"><div class="meter-fill" data-width="15"></div></div>
+      </div>
+      <div class="meter-row">
+        <div class="label"><span>Энергия после новости «едем в клуб»</span><span>97%</span></div>
+        <div class="meter-track"><div class="meter-fill" data-width="97"></div></div>
+      </div>
+      <div class="meter-row">
+        <div class="label"><span>Любовь к рулю и дороге в никуда</span><span>90%</span></div>
+        <div class="meter-track"><div class="meter-fill" data-width="90"></div></div>
+      </div>
+      <div class="meter-row">
+        <div class="label"><span>Терпение к звонкам от родителей</span><span>40%</span></div>
+        <div class="meter-track"><div class="meter-fill" data-width="40"></div></div>
+      </div>
+      <div class="meter-row">
+        <div class="label"><span>Способность быть душой компании по требованию</span><span>88%</span></div>
+        <div class="meter-track"><div class="meter-fill" data-width="88"></div></div>
+      </div>
+      <div class="meter-row">
+        <div class="label"><span>Кайф от тишины наедине с собой</span><span>75%</span></div>
+        <div class="meter-track"><div class="meter-fill" data-width="75"></div></div>
+      </div>
+    </div>
+
+    <div class="funny-grid">
+      <div class="card">
+        <img src="photos/portrait-bw.jpg" alt="Интроверт-экстраверт">
+        <div class="body">
+          <h3>Интроверт по будням, звезда по пятницам</h3>
+          <p>Может сутками не выходить из дома, а через час уже собирается в клуб с подругами, как будто так и было задумано.</p>
+        </div>
+      </div>
+      <div class="card">
+        <video src="photos/car-ride-real.mp4" autoplay muted loop playsinline></video>
+        <div class="body">
+          <h3>Личный психотерапевт — руль</h3>
+          <p>Полчаса за рулём без цели лечат лучше любого разговора. Главное — бензин.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="photos/work-still.jpg" alt="Коллектив">
+        <div class="body">
+          <h3>Коллектив — единственная причина не уволиться</h3>
+          <p>Работа забирает силы, зато люди вокруг явно того стоят. Почти всегда.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ФИНАЛ ===================== -->
+<section class="closing">
+  <div class="wrap">
+    <img src="photos/home-real.jpg" alt="Розы">
+    <h2>С днём рождения, Принцесса!</h2>
+    <p>Пусть в этом году работа отнимает меньше сил, а люди вокруг — дают их больше.
+       Пусть будет больше поездок без цели, вечеров с подругами и тихих моментов наедине с собой —
+       именно таких, какие тебе нужны. А рядом с Димой — только тепло и спокойствие.</p>
+    <p>Ты сильнее, чем думаешь, и ярче, чем замечаешь сама. С днём рождения! 🎂</p>
+    <div class="signature">— твой рыцарь</div>
+    <button class="surprise-btn" onclick="burstConfetti(120)">🎉 Нажми меня</button>
+  </div>
+</section>
+
+<footer>Сделано с любовью · <span id="year"></span></footer>
+
+<script>
+  // плавное появление секций
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  },{threshold:0.15});
+  revealEls.forEach(el=>io.observe(el));
+
+  // анимация шкал при появлении
+  const meters = document.querySelectorAll('.meter-fill');
+  const mio = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.style.width = e.target.dataset.width + '%';
+        mio.unobserve(e.target);
+      }
+    });
+  },{threshold:0.3});
+  meters.forEach(m=>mio.observe(m));
+
+  // плавающие сердечки на фоне
+  const heartsLayer = document.getElementById('hearts');
+  const heartColors = ['#c1623f','#d96c6c','#e8a33d'];
+  function spawnHeart(){
+    const h = document.createElement('div');
+    h.className = 'heart';
+    h.style.left = Math.random()*100 + 'vw';
+    h.style.fontSize = (14 + Math.random()*20) + 'px';
+    h.style.color = heartColors[Math.floor(Math.random()*heartColors.length)];
+    h.style.animationDuration = (10 + Math.random()*8) + 's';
+    h.textContent = '♥';
+    heartsLayer.appendChild(h);
+    setTimeout(()=>h.remove(), 20000);
+  }
+  setInterval(spawnHeart, 1200);
+  for(let i=0;i<6;i++) setTimeout(spawnHeart, i*300);
+
+  // звук у видео «в фокусе» — тихо, только после первого клика (так требуют браузеры)
+  let audioUnlocked = false;
+  const unlockAudio = () => { audioUnlocked = true; };
+  document.addEventListener('click', unlockAudio, {once:true});
+  document.addEventListener('touchstart', unlockAudio, {once:true});
+  document.addEventListener('keydown', unlockAudio, {once:true});
+
+  const focusVideos = document.querySelectorAll('video');
+  const vio = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      const v = e.target;
+      if(e.isIntersecting && e.intersectionRatio > 0.6 && audioUnlocked){
+        v.muted = false;
+        v.volume = 0.35;
+      } else {
+        v.muted = true;
+      }
+    });
+  },{threshold:[0,0.6,1]});
+  focusVideos.forEach(v=>vio.observe(v));
+
+  // конфетти
+  const confettiLayer = document.getElementById('confetti-layer');
+  const confettiColors = ['#c1623f','#d96c6c','#e8a33d','#f3dcc4','#9c4a2e'];
+  function burstConfetti(count){
+    for(let i=0;i<count;i++){
+      const p = document.createElement('div');
+      p.className = 'confetti-piece';
+      const size = 6 + Math.random()*8;
+      p.style.width = size + 'px';
+      p.style.height = (size*0.4) + 'px';
+      p.style.left = Math.random()*100 + 'vw';
+      p.style.background = confettiColors[Math.floor(Math.random()*confettiColors.length)];
+      p.style.animationDuration = (2.5 + Math.random()*2) + 's';
+      confettiLayer.appendChild(p);
+      setTimeout(()=>p.remove(), 5000);
+    }
+  }
+  window.addEventListener('load', ()=> burstConfetti(70));
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
