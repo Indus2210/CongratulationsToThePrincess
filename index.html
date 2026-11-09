@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>С Днём Рождения, Принцесса!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --copper:#c1623f;
+    --copper-dark:#9c4a2e;
+    --gold:#e8a33d;
+    --rose:#d96c6c;
+    --cream:#fdf1e6;
+    --cream-dark:#f3dcc4;
+    --ink:#4a2f22;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;overflow-x:hidden;width:100%;}
+  body{
+    margin:0;
+    font-family:'Nunito',sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    overflow-x:hidden;
+    width:100%;
+  }
+  h1,h2,.script{
+    font-family:'Pacifico',cursive;
+    font-weight:400;
+  }
+  .wrap{max-width:1000px;margin:0 auto;padding:0 24px;}
+  section{padding:90px 0;position:relative;}
+
+  /* ---------- floating background hearts ---------- */
+  #hearts{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0;}
+  .heart{position:absolute;bottom:-40px;opacity:0.5;animation:floatUp linear infinite;}
+  @keyframes floatUp{
+    0%{transform:translateY(0) rotate(0deg);opacity:0.6;}
+    100%{transform:translateY(-110vh) rotate(25deg);opacity:0;}
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    background:linear-gradient(160deg,var(--gold),var(--copper) 60%,var(--copper-dark));
+    color:var(--cream);
+    position:relative;
+    z-index:1;
+  }
+  .hero h1{font-size:clamp(2.6rem,7vw,4.5rem);margin:0 0 6px;text-shadow:0 4px 18px rgba(0,0,0,0.25);}
+  .hero .age{font-size:1.3rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;opacity:0.9;margin-bottom:28px;}
+  .polaroid{
+    background:#fff;
+    padding:14px 14px 50px;
+    border-radius:4px;
+    box-shadow:0 20px 40px rgba(0,0,0,0.35);
+    transform:rotate(-4deg);
+    max-width:300px;
+    margin-bottom:34px;
+  }
+  .polaroid img{display:block;width:100%;border-radius:2px;}
+  .polaroid .cap{
+    font-family:'Pacifico',cursive;
+    color:var(--copper-dark);
+    text-align:center;
+    margin-top:12px;
+    font-size:1.1rem;
+  }
+  .hero p.lead{max-width:560px;font-size:1.15rem;line-height:1.6;opacity:0.95;padding:0 20px;}
+  .scrolldown{margin-top:40px;font-size:2rem;animation:bounce 2s infinite;opacity:0.85;}
+  @keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(12px);}}
+
+  /* ---------- section headers ---------- */
+  .section-title{
+    text-align:center;
+    font-size:clamp(2rem,5vw,2.8rem);
+    color:var(--copper-dark);
+    margin-bottom:10px;
+  }
+  .section-sub{
+    text-align:center;
+    max-width:620px;
+    margin:0 auto 50px;
+    opacity:0.8;
+    line-height:1.6;
+  }
+
+  .reveal{opacity:0;transform:translateY(30px);transition:all 0.8s ease;}
+  .reveal.visible{opacity:1;transform:translateY(0);}
+
+  /* ---------- trait cards ---------- */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:28px;
+  }
+  .card{
+    background:#fff;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 12px 30px rgba(156,74,46,0.14);
+    transition:transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .card:hover{transform:translateY(-8px);box-shadow:0 18px 36px rgba(156,74,46,0.24);}
+  .card img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;}
+  .card .media-wrap{width:100%;aspect-ratio:4/3;position:relative;overflow:hidden;background:#000;}
+  .card .media-wrap video{width:100%;height:100%;object-fit:cover;display:block;}
+  .card .body{padding:18px 20px 22px;}
+  .card h3{margin:0 0 8px;color:var(--copper-dark);font-size:1.2rem;}
+  .card p{margin:0;line-height:1.55;font-size:0.97rem;}
+
+  /* ---------- collage ---------- */
+  .collage{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+  }
+  .collage figure{
+    margin:0;
+    background:#fff;
+    padding:8px 8px 26px;
+    border-radius:6px;
+    box-shadow:0 10px 24px rgba(156,74,46,0.18);
+  }
+  .collage img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:2px;display:block;}
+  .collage .media-wrap{width:100%;aspect-ratio:1/1;position:relative;overflow:hidden;border-radius:2px;background:#000;}
+  .collage .media-wrap video{width:100%;height:100%;object-fit:cover;display:block;}
+  .collage figcaption{font-family:'Pacifico',cursive;font-size:0.85rem;text-align:center;color:var(--copper-dark);margin-top:8px;}
+
+  /* ---------- кнопка воспроизведения со звуком ---------- */
+  .play-btn{
+    position:absolute;
+    top:50%;left:50%;
+    transform:translate(-50%,-50%);
+    width:56px;height:56px;
+    border-radius:50%;
+    background:rgba(0,0,0,0.5);
+    border:2px solid rgba(255,255,255,0.9);
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    transition:opacity 0.25s ease, transform 0.2s ease, background 0.2s ease;
+    z-index:2;
+    padding:0;
+  }
+  .play-btn:hover{transform:translate(-50%,-50%) scale(1.08);background:rgba(0,0,0,0.65);}
+  .play-btn::after{
+    content:'';
+    display:block;
+    width:0;height:0;
+    border-style:solid;
+    border-width:9px 0 9px 15px;
+    border-color:transparent transparent transparent #fff;
+    margin-left:4px;
+  }
+  .play-btn.playing{opacity:0.55;}
+  .play-btn.playing:hover{opacity:1;}
+  .play-btn.playing::after{
+    width:14px;height:16px;
+    border-style:none;
+    margin-left:0;
+    background:
+      linear-gradient(#fff,#fff) left/4px 100% no-repeat,
+      linear-gradient(#fff,#fff) right/4px 100% no-repeat;
+  }
+  .collage figure:nth-child(odd){transform:rotate(-3deg);}
+  .collage figure:nth-child(even){transform:rotate(2.5deg);}
+  .collage figure:nth-child(3n){transform:rotate(-1.5deg);}
+
+  /* ---------- funny dossier ---------- */
+  .dossier-wrap{
+    background:var(--cream-dark);
+    border-radius:24px;
+    padding:50px 40px;
+  }
+  .meters{display:flex;flex-direction:column;gap:22px;max-width:620px;margin:0 auto 50px;}
+  .meter-row .label{display:flex;justify-content:space-between;font-weight:700;margin-bottom:6px;color:var(--copper-dark);}
+  .meter-track{background:#fff;border-radius:20px;height:16px;overflow:hidden;box-shadow:inset 0 2px 4px rgba(0,0,0,0.08);}
+  .meter-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,var(--gold),var(--rose));width:0;transition:width 1.6s ease;}
+
+  .funny-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:24px;
+  }
+  .funny-grid .card h3{font-size:1.05rem;}
+
+  /* ---------- closing ---------- */
+  .closing{
+    background:linear-gradient(160deg,var(--copper-dark),var(--copper) 60%,var(--gold));
+    color:var(--cream);
+    text-align:center;
+  }
+  .closing img{max-width:260px;margin-bottom:28px;border-radius:14px;box-shadow:0 20px 40px rgba(0,0,0,0.3);}
+  .closing h2{font-size:clamp(2rem,5vw,2.8rem);margin-bottom:18px;}
+  .closing p{max-width:600px;margin:0 auto 14px;line-height:1.7;font-size:1.08rem;}
+  .signature{font-family:'Pacifico',cursive;font-size:1.4rem;margin-top:26px;opacity:0.95;}
+  .edit-note{font-size:0.8rem;opacity:0.75;margin-top:4px;}
+  .surprise-btn{
+    margin-top:36px;
+    background:var(--cream);
+    color:var(--copper-dark);
+    border:none;
+    padding:16px 34px;
+    border-radius:40px;
+    font-size:1.05rem;
+    font-weight:800;
+    cursor:pointer;
+    box-shadow:0 10px 24px rgba(0,0,0,0.25);
+    transition:transform 0.2s ease;
+  }
+  .surprise-btn:hover{transform:scale(1.06);}
+
+  /* ---------- цветы ---------- */
+  .flowers{text-align:center;}
+  .flowers-card{
+    max-width:480px;
+    margin:0 auto;
+    background:#fff;
+    border-radius:22px;
+    padding:36px 28px;
+    box-shadow:0 14px 34px rgba(156,74,46,0.16);
+  }
+  .flowers-card p{margin:0 0 22px;line-height:1.6;font-size:1.05rem;}
+  .flowers-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;}
+  .flowers-btn{
+    background:var(--cream-dark);
+    color:var(--copper-dark);
+    border:none;
+    padding:14px 26px;
+    border-radius:40px;
+    font-family:'Nunito',sans-serif;
+    font-size:1rem;
+    font-weight:700;
+    cursor:pointer;
+    transition:transform 0.2s ease, background 0.2s ease;
+  }
+  .flowers-btn:hover{transform:scale(1.05);background:var(--cream);}
+  .flowers-btn.primary{background:linear-gradient(90deg,var(--gold),var(--rose));color:#fff;}
+  .flowers-form{display:flex;flex-direction:column;gap:16px;align-items:center;}
+  .flowers-form label{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    font-weight:700;
+    color:var(--copper-dark);
+    width:100%;
+    max-width:260px;
+    text-align:left;
+  }
+  .flowers-form input{
+    font-family:'Nunito',sans-serif;
+    font-size:1rem;
+    padding:10px 14px;
+    border-radius:12px;
+    border:1.5px solid var(--cream-dark);
+    background:var(--cream);
+    color:var(--ink);
+  }
+  .flowers-form input:focus{outline:2px solid var(--gold);}
+  .flowers-result{
+    background:var(--cream);
+    border-radius:14px;
+    padding:18px;
+    text-align:left;
+  }
+  .flowers-result p{margin:0 0 14px;white-space:pre-line;font-size:0.95rem;}
+  .flowers-copied-msg{margin-left:10px;color:var(--copper-dark);font-weight:700;}
+
+  .song-note{text-align:center;}
+  .song-card p{margin-bottom:22px;}
+  .song-play-btn.playing{background:linear-gradient(90deg,var(--rose),var(--gold));}
+
+  footer{text-align:center;padding:26px;font-size:0.85rem;color:var(--copper-dark);opacity:0.7;background:var(--cream);}
+
+  #confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:999;overflow:hidden;}
+  .confetti-piece{position:absolute;top:-20px;border-radius:2px;animation:confettiFall linear forwards;}
+  @keyframes confettiFall{
+    to{transform:translateY(110vh) rotate(540deg);opacity:0.2;}
+  }
+
+  @media (max-width:700px){
+    .collage{grid-template-columns:repeat(2,1fr);}
+    section{padding:60px 0;}
+  }
+</style>
+</head>
+<body>
+
+<div id="hearts"></div>
+<div id="confetti-layer"></div>
+
+<audio id="bg-music" src="photos/song-fire.mp3" loop preload="none"></audio>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero">
+  <div class="polaroid">
+    <img src="photos/hero-real.jpg" alt="Алина">
+    <div class="cap">Принцесса ✦ 26</div>
+  </div>
+  <h1>С Днём Рождения, Принцесса!</h1>
+  <div class="age">26 — твой самый яркий год</div>
+  <p class="lead">Сегодня день, когда весь мир просто обязан сказать тебе спасибо за то, что ты в нём есть.</p>
+  <div class="scrolldown">↓</div>
+</section>
+
+<!-- ===================== ПОЛОЖИТЕЛЬНЫЕ ЧЕРТЫ ===================== -->
+<section class="wrap">
+  <h2 class="section-title reveal">Какая ты на самом деле</h2>
+  <p class="section-sub reveal">Без пафоса, просто то, что про тебя правда — и за что тебя действительно стоит любить.</p>
+
+  <div class="grid">
+    <div class="card reveal">
+      <img src="photos/redhair-real.jpg" alt="Рыжая и яркая">
+      <div class="body">
+        <h3>Яркая, как огонь 🔥</h3>
+        <p>Рыжая — значит с характером. Тебя невозможно не заметить, и это не только про волосы.</p>
+      </div>
+    </div>
+    <div class="card reveal">
+      <div class="media-wrap">
+        <video src="photos/work-dance.mp4" autoplay muted loop playsinline></video>
+        <button class="play-btn" aria-label="Включить со звуком"></button>
+      </div>
+      <div class="body">
+        <h3>Преданная своему делу</h3>
+        <p>Работа выматывает, но ты остаёшься — потому что умеешь ценить людей вокруг себя больше, чем усталость.</p>
+      </div>
+    </div>
+    <div class="card reveal">
+      <img src="photos/strength-real.jpg" alt="Сила духа">
+      <div class="body">
+        <h3>Сильная духом</h3>
+        <p>Непростые отношения с родителями не сломали тебя — ты всё равно идёшь своим путём, и это достойно уважения.</p>
+      </div>
+    </div>
+    <div class="card reveal">
+      <img src="photos/home-porch.jpg" alt="Дом">
+      <div class="body">
+        <h3>Хранительница дома</h3>
+        <p>Несмотря ни на что, ты держишь свой мир — и находишь в нём место и для себя, и для близких.</p>
+      </div>
+    </div>
+    <div class="card reveal">
+      <div class="media-wrap">
+        <video src="photos/sunset-walk.mp4" autoplay muted loop playsinline style="object-position:center 12%;"></video>
+        <button class="play-btn" aria-label="Включить со звуком"></button>
+      </div>
+      <div class="body">
+        <h3>Умеешь наполняться тишиной</h3>
+        <p>Ты знаешь цену своему пространству — и это не одиночество, а способ оставаться собой.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ФОТОКОЛЛАЖ ===================== -->
+<section class="wrap">
+  <h2 class="section-title reveal">Фотоколлаж</h2>
+  <p class="section-sub reveal">Моменты, которые о тебе говорят больше слов.</p>
+  <div class="collage">
+    <figure class="reveal"><img src="photos/hero-real.jpg" alt=""><figcaption>Это ты</figcaption></figure>
+    <figure class="reveal">
+      <div class="media-wrap">
+        <video src="photos/friends-night.mp4" autoplay muted loop playsinline></video>
+        <button class="play-btn" aria-label="Включить со звуком"></button>
+      </div>
+      <figcaption>Подруги</figcaption>
+    </figure>
+    <figure class="reveal"><img src="photos/car-still.jpg" alt=""><figcaption>Покатушки</figcaption></figure>
+    <figure class="reveal"><img src="photos/work-colleagues-still.jpg" alt=""><figcaption>Коллеги</figcaption></figure>
+    <figure class="reveal"><img src="photos/home-porch.jpg" alt=""><figcaption>Дом</figcaption></figure>
+    <figure class="reveal"><img src="photos/field-daisies.jpg" alt=""><figcaption>На природе</figcaption></figure>
+    <figure class="reveal"><img src="photos/sunset-still.jpg" alt="" style="object-position:center 15%;"><figcaption>Закат</figcaption></figure>
+  </div>
+</section>
+
+<!-- ===================== ШУТОЧНОЕ ДОСЬЕ ===================== -->
+<section class="wrap">
+  <h2 class="section-title reveal">Шуточное досье</h2>
+
+  <div class="dossier-wrap reveal">
+    <div class="meters">
+      <div class="meter-row">
+        <div class="label"><span>Энергия после смены на работе</span><span>15%</span></div>
+        <div class="meter-track"><div class="meter-fill" data-width="15"></div></div>
+      </div>
+      <div class="meter-row">
+        <div class="label"><span>Энергия после новости «едем в клуб»</span><span>97%</span></div>
+        <div class="meter-track"><div class="meter-fill" data-width="97"></div></div>
+      </div>
+      <div class="meter-row">
+        <div class="label"><span>Любовь к рулю и дороге в никуда</span><span>90%</span></div>
+        <div class="meter-track"><div class="meter-fill" data-width="90"></div></div>
+      </div>
+      <div class="meter-row">
+        <div class="label"><span>Терпение к звонкам от родителей</span><span>40%</span></div>
+        <div class="meter-track"><div class="meter-fill" data-width="40"></div></div>
+      </div>
+      <div class="meter-row">
+        <div class="label"><span>Способность быть душой компании по требованию</span><span>88%</span></div>
+        <div class="meter-track"><div class="meter-fill" data-width="88"></div></div>
+      </div>
+      <div class="meter-row">
+        <div class="label"><span>Кайф от тишины наедине с собой</span><span>75%</span></div>
+        <div class="meter-track"><div class="meter-fill" data-width="75"></div></div>
+      </div>
+    </div>
+
+    <div class="funny-grid">
+      <div class="card">
+        <img src="photos/portrait-bw.jpg" alt="Интроверт-экстраверт">
+        <div class="body">
+          <h3>Интроверт по будням, звезда по пятницам</h3>
+          <p>Может сутками не выходить из дома, а через час уже собирается в клуб с подругами, как будто так и было задумано.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="media-wrap">
+          <video src="photos/car-ride-real.mp4" autoplay muted loop playsinline></video>
+          <button class="play-btn" aria-label="Включить со звуком"></button>
+        </div>
+        <div class="body">
+          <h3>Личный психотерапевт — руль</h3>
+          <p>Полчаса за рулём без цели лечат лучше любого разговора. Главное — бензин.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="photos/work-still.jpg" alt="Коллектив">
+        <div class="body">
+          <h3>Коллектив — единственная причина не уволиться</h3>
+          <p>Работа забирает силы, зато люди вокруг явно того стоят. Почти всегда.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ФИНАЛ ===================== -->
+<section class="closing">
+  <div class="wrap">
+    <img src="photos/home-real.jpg" alt="Розы">
+    <h2>С днём рождения, Принцесса!</h2>
+    <p>Пусть в этом году работа отнимает меньше сил, а люди вокруг — дают их больше.
+       Пусть будет больше поездок без цели, вечеров с подругами и тихих моментов наедине с собой —
+       именно таких, какие тебе нужны. А рядом с Димой — только тепло и спокойствие.</p>
+    <p>Ты сильнее, чем думаешь, и ярче, чем замечаешь сама. С днём рождения! 🎂</p>
+    <div class="signature">— твой рыцарь</div>
+    <button class="surprise-btn" onclick="burstConfetti(120)">🎉 Нажми меня</button>
+  </div>
+</section>
+
+<!-- ===================== ПЕСНЯ ===================== -->
+<section class="song-note wrap reveal">
+  <div class="flowers-card song-card">
+    <p>Пробовал сделать песню в стиле группы Базар — не уверен, что получилось прямо
+       похоже, но очень старался. Вот что вышло:</p>
+    <button type="button" id="song-play-btn" class="flowers-btn primary song-play-btn">▶ Включить песню</button>
+  </div>
+</section>
+
+<!-- ===================== ЦВЕТЫ ===================== -->
+<section class="flowers wrap reveal">
+  <h2 class="section-title">Ещё одна мысль...</h2>
+  <p class="section-sub">Маленький вопрос напоследок.</p>
+
+  <div id="flowers-step1" class="flowers-card">
+    <p>На день рождения я хочу подарить тебе цветы. Ты не против?</p>
+    <div class="flowers-actions">
+      <button type="button" class="flowers-btn primary" onclick="flowersSayYes()">Да, с радостью 💐</button>
+      <button type="button" class="flowers-btn" onclick="flowersSayNo()">Не в этот раз</button>
+    </div>
+  </div>
+
+  <div id="flowers-step2" class="flowers-card" hidden>
+    <p>Ура! Тогда подскажи, когда и куда их привезти.</p>
+    <form id="flowers-form" class="flowers-form" onsubmit="flowersSubmit(event)">
+      <label>Дата
+        <input type="date" id="flowers-date" required>
+      </label>
+      <label>Адрес
+        <input type="text" id="flowers-address" placeholder="Город, улица, дом" required>
+      </label>
+      <button type="submit" class="flowers-btn primary">Отправить</button>
+    </form>
+  </div>
+
+  <div id="flowers-declined" class="flowers-card" hidden>
+    <p>Хорошо, никакого давления 🤍 Предложение остаётся в силе — скажешь, когда захочешь.</p>
+  </div>
+
+  <div id="flowers-sending" class="flowers-card" hidden>
+    <p>Отправляю…</p>
+  </div>
+
+  <div id="flowers-success" class="flowers-card" hidden>
+    <p>Готово! Сообщение уже улетело — спасибо 💐</p>
+  </div>
+
+  <div id="flowers-fallback" class="flowers-card" hidden>
+    <p>Не получилось отправить автоматически. Сейчас попробую открыть сообщение ВКонтакте с уже готовым
+       текстом — там останется только нажать «Отправить». Если ВК сам не откроется, вот текст — можно
+       скопировать и прислать любым удобным способом:</p>
+    <div class="flowers-result">
+      <p id="flowers-result-text"></p>
+      <button type="button" class="flowers-btn" onclick="flowersCopy()">Скопировать текст</button>
+      <span id="flowers-copied" class="flowers-copied-msg" hidden>Скопировано ✓</span>
+    </div>
+  </div>
+</section>
+
+<footer>Сделано с любовью · <span id="year"></span></footer>
+
+<script>
+  // плавное появление секций
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  },{threshold:0.15});
+  revealEls.forEach(el=>io.observe(el));
+
+  // анимация шкал при появлении
+  const meters = document.querySelectorAll('.meter-fill');
+  const mio = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.style.width = e.target.dataset.width + '%';
+        mio.unobserve(e.target);
+      }
+    });
+  },{threshold:0.3});
+  meters.forEach(m=>mio.observe(m));
+
+  // плавающие сердечки на фоне
+  const heartsLayer = document.getElementById('hearts');
+  const heartColors = ['#c1623f','#d96c6c','#e8a33d'];
+  function spawnHeart(){
+    const h = document.createElement('div');
+    h.className = 'heart';
+    h.style.left = Math.random()*100 + 'vw';
+    h.style.fontSize = (14 + Math.random()*20) + 'px';
+    h.style.color = heartColors[Math.floor(Math.random()*heartColors.length)];
+    h.style.animationDuration = (10 + Math.random()*8) + 's';
+    h.textContent = '♥';
+    heartsLayer.appendChild(h);
+    setTimeout(()=>h.remove(), 20000);
+  }
+  setInterval(spawnHeart, 1200);
+  for(let i=0;i<6;i++) setTimeout(spawnHeart, i*300);
+
+  // кнопка воспроизведения со звуком поверх видео — пауза и только одно видео со звуком одновременно
+  let activeWrap = null;
+
+  function resetToIdle(wrap, resumeMusic){
+    if(resumeMusic === undefined) resumeMusic = true;
+    const video = wrap.querySelector('video');
+    const btn = wrap.querySelector('.play-btn');
+    video.muted = true;
+    video.loop = true;
+    video.currentTime = 0;
+    video.play();
+    btn.classList.remove('playing');
+    if(activeWrap === wrap) activeWrap = null;
+    if(resumeMusic) resumeBgMusicIfNeeded();
+  }
+
+  document.querySelectorAll('.media-wrap').forEach(wrap=>{
+    const video = wrap.querySelector('video');
+    const btn = wrap.querySelector('.play-btn');
+    if(!video || !btn) return;
+
+    btn.addEventListener('click', (e)=>{
+      e.stopPropagation();
+
+      if(activeWrap === wrap){
+        // это видео уже активно — просто пауза/продолжить
+        if(video.paused){
+          video.play();
+          btn.classList.add('playing');
+          pauseBgMusic(true);
+        } else {
+          video.pause();
+          btn.classList.remove('playing');
+          resumeBgMusicIfNeeded();
+        }
+        return;
+      }
+
+      // включаем это видео со звуком — предыдущее активное возвращаем в тихий цикл
+      if(activeWrap) resetToIdle(activeWrap, false);
+      pauseBgMusic(true);
+
+      video.loop = false;
+      video.currentTime = 0;
+      video.muted = false;
+      video.volume = 0.7;
+      video.play();
+      btn.classList.add('playing');
+      activeWrap = wrap;
+    });
+
+    video.addEventListener('ended', ()=> resetToIdle(wrap));
+  });
+
+  // фоновая музыка — кнопка-плеер в блоке с песней
+  const bgMusic = document.getElementById('bg-music');
+  const songPlayBtn = document.getElementById('song-play-btn');
+  let musicPlaying = false;
+  let musicPausedForVideo = false;
+
+  function updateMusicButtons(){
+    if(!songPlayBtn) return;
+    if(musicPlaying){
+      songPlayBtn.textContent = '⏸ Пауза';
+      songPlayBtn.classList.add('playing');
+    } else {
+      songPlayBtn.textContent = '▶ Включить песню';
+      songPlayBtn.classList.remove('playing');
+    }
+  }
+
+  function pauseBgMusic(forVideo){
+    if(!musicPlaying) return;
+    bgMusic.pause();
+    musicPlaying = false;
+    if(forVideo) musicPausedForVideo = true;
+    updateMusicButtons();
+  }
+
+  function resumeBgMusicIfNeeded(){
+    if(!musicPausedForVideo) return;
+    musicPausedForVideo = false;
+    if(musicPlaying) return;
+    bgMusic.play();
+    musicPlaying = true;
+    updateMusicButtons();
+  }
+
+  function toggleBgMusic(){
+    if(musicPlaying){
+      pauseBgMusic();
+      return;
+    }
+    if(activeWrap) resetToIdle(activeWrap, false);
+    bgMusic.play();
+    musicPlaying = true;
+    updateMusicButtons();
+  }
+
+  if(songPlayBtn) songPlayBtn.addEventListener('click', toggleBgMusic);
+
+  // конфетти
+  const confettiLayer = document.getElementById('confetti-layer');
+  const confettiColors = ['#c1623f','#d96c6c','#e8a33d','#f3dcc4','#9c4a2e'];
+  function burstConfetti(count){
+    for(let i=0;i<count;i++){
+      const p = document.createElement('div');
+      p.className = 'confetti-piece';
+      const size = 6 + Math.random()*8;
+      p.style.width = size + 'px';
+      p.style.height = (size*0.4) + 'px';
+      p.style.left = Math.random()*100 + 'vw';
+      p.style.background = confettiColors[Math.floor(Math.random()*confettiColors.length)];
+      p.style.animationDuration = (2.5 + Math.random()*2) + 's';
+      confettiLayer.appendChild(p);
+      setTimeout(()=>p.remove(), 5000);
+    }
+  }
+  window.addEventListener('load', ()=> burstConfetti(70));
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // форма "цветы" — согласие + дата/время
+  const flowersDateInput = document.getElementById('flowers-date');
+  if(flowersDateInput){
+    flowersDateInput.min = new Date().toISOString().split('T')[0];
+  }
+
+  function flowersSayYes(){
+    document.getElementById('flowers-step1').hidden = true;
+    document.getElementById('flowers-step2').hidden = false;
+  }
+
+  function flowersSayNo(){
+    document.getElementById('flowers-step1').hidden = true;
+    document.getElementById('flowers-declined').hidden = false;
+  }
+
+  const VK_RECIPIENT = 'schaguschin';
+  // Сюда вставить адрес развёрнутой серверной функции (Cloudflare Worker), см. VK-УВЕДОМЛЕНИЯ-ИНСТРУКЦИЯ.md
+  const FLOWERS_ENDPOINT = 'https://flowers-notify.indus2210.workers.dev';
+
+  async function flowersSubmit(e){
+    e.preventDefault();
+    const date = document.getElementById('flowers-date').value;
+    const address = document.getElementById('flowers-address').value;
+    const dateObj = new Date(date + 'T00:00');
+    const dateStr = dateObj.toLocaleDateString('ru-RU', {day:'numeric', month:'long', year:'numeric'});
+    const message = `Принцесса согласна на цветы! 💐\nДата: ${dateStr}\nАдрес: ${address}`;
+
+    document.getElementById('flowers-result-text').textContent = message;
+    document.getElementById('flowers-step2').hidden = true;
+
+    if(!FLOWERS_ENDPOINT){
+      flowersFallback(message);
+      return;
+    }
+
+    document.getElementById('flowers-sending').hidden = false;
+    try{
+      const resp = await fetch(FLOWERS_ENDPOINT, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({date: dateStr, address}),
+      });
+      const data = await resp.json();
+      if(!resp.ok || !data.ok) throw new Error(data.error || 'send failed');
+
+      document.getElementById('flowers-sending').hidden = true;
+      document.getElementById('flowers-success').hidden = false;
+    } catch(err){
+      document.getElementById('flowers-sending').hidden = true;
+      flowersFallback(message);
+    }
+  }
+
+  function flowersFallback(message){
+    document.getElementById('flowers-fallback').hidden = false;
+    const text = encodeURIComponent(message);
+    window.open(`https://vk.me/${VK_RECIPIENT}?text=${text}`, '_blank');
+  }
+
+  function flowersCopy(){
+    const text = document.getElementById('flowers-result-text').textContent;
+    const msg = document.getElementById('flowers-copied');
+    navigator.clipboard.writeText(text).then(()=>{
+      msg.hidden = false;
+      setTimeout(()=> msg.hidden = true, 2000);
+    }).catch(()=>{});
+  }
+</script>
+
+</body>
+</html>
