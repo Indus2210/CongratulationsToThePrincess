@@ -748,6 +748,26 @@
       setTimeout(()=> msg.hidden = true, 2000);
     }).catch(()=>{});
   }
+
+  // Уведомление в ВК о заходе на сайт (один раз за сессию браузера)
+  (function notifyVisit(){
+    if(!FLOWERS_ENDPOINT) return;
+    try{
+      if(sessionStorage.getItem('visitNotified')) return;
+      sessionStorage.setItem('visitNotified', '1');
+    } catch(e){}
+
+    const timestamp = new Date().toLocaleString('ru-RU', {
+      day:'numeric', month:'long', hour:'2-digit', minute:'2-digit'
+    });
+
+    fetch(FLOWERS_ENDPOINT, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({type:'visit', timestamp}),
+      keepalive: true,
+    }).catch(()=>{});
+  })();
 </script>
 
 </body>
