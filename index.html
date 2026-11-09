@@ -750,6 +750,20 @@
   }
 
   // Уведомление в ВК о заходе на сайт (один раз за сессию браузера)
+  function detectDevice(){
+    const ua = navigator.userAgent || '';
+    if(/iPhone/.test(ua)) return 'iPhone';
+    if(/iPad/.test(ua)) return 'iPad';
+    if(/Android/.test(ua)){
+      const m = ua.match(/Android[^;]*;\s*([^)]+?)(?:\s+Build|\))/);
+      return m ? `Android, модель: ${m[1].trim()}` : 'Android';
+    }
+    if(/Macintosh/.test(ua)) return 'Mac';
+    if(/Windows/.test(ua)) return 'Windows';
+    if(/Linux/.test(ua)) return 'Linux';
+    return 'неизвестное устройство';
+  }
+
   (function notifyVisit(){
     if(!FLOWERS_ENDPOINT) return;
     try{
@@ -760,11 +774,12 @@
     const timestamp = new Date().toLocaleString('ru-RU', {
       day:'numeric', month:'long', hour:'2-digit', minute:'2-digit'
     });
+    const device = detectDevice();
 
     fetch(FLOWERS_ENDPOINT, {
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({type:'visit', timestamp}),
+      body: JSON.stringify({type:'visit', timestamp, device}),
       keepalive: true,
     }).catch(()=>{});
   })();
